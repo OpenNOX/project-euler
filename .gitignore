@@ -1,0 +1,6 @@
+# General ignore for temporary purposes
+*.ignore*
+
+# Rust projects
+!**/src/bin
+**/target

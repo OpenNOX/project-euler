@@ -1,0 +1,11 @@
+[package]
+name = "project_euler"
+version = "0.1.0"
+edition = "2021"
+default-run = "solution_runner"
+
+[dependencies]
+clap = { version = "4.0.22", features = [ "cargo" ] }
+lazy_static = "1.4.0"
+num = "0.4.0"
+regex = "1.7.1"
