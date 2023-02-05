@@ -1,6 +1,47 @@
 use crate::shared::math_helpers::is_prime_number;
 
+/// Collatz sequence iterator.
+/// ## Notes
+/// - **Collatz sequence:** A series of numbers where each term is found using a rule below until 1
+///   is reached.
+///   - **n is even:** n / 2
+///   - **n is odd:** 3n + 1
+pub struct CollatzSequence {
+    /// Term returned upon iteration.
+    current_term: Option<u64>,
+}
+
+impl CollatzSequence {
+    pub fn new(initial_term: u64) -> Self {
+        Self {
+            current_term: Some(initial_term),
+        }
+    }
+}
+
+impl Iterator for CollatzSequence {
+    type Item = u64;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let current_term = match self.current_term {
+            Some(current_term) => current_term,
+            None => return None,
+        };
+
+        self.current_term = if current_term == 1 {
+            None
+        } else if current_term % 2 == 0 {
+            Some(current_term / 2)
+        } else {
+            Some((current_term * 3) + 1)
+        };
+
+        Some(current_term)
+    }
+}
+
 /// Fibonacci sequence iterator.
+/// ## Notes
 /// - **Fibonacci sequence:** A series of numbers where the next term is found by adding up the two
 ///   previous terms.
 pub struct FibonacciSequence {
@@ -68,7 +109,7 @@ impl Iterator for PrimeNumbers {
 mod tests {
     extern crate test;
 
-    use super::{FibonacciSequence, PrimeNumbers};
+    use super::{CollatzSequence, FibonacciSequence, PrimeNumbers};
     use test::Bencher;
 
     #[test]
@@ -91,6 +132,17 @@ mod tests {
         assert_eq!(actual_prime_numbers, expected_prime_numbers);
     }
 
+    #[test]
+    fn collatz_sequence_iterates_through_terms() {
+        let expected_collatz_sequence_terms: Vec<u64> = vec![13, 40, 20, 10, 5, 16, 8, 4, 2, 1];
+        let actual_collatz_sequence_terms: Vec<u64> = CollatzSequence::new(13).collect();
+
+        assert_eq!(
+            expected_collatz_sequence_terms,
+            actual_collatz_sequence_terms
+        );
+    }
+
     #[bench]
     fn bench_fibonacci_sequence_to_fiftieth_term(bencher: &mut Bencher) {
         bencher.iter(|| {
@@ -109,5 +161,10 @@ mod tests {
                 .advance_by(1_000)
                 .expect("prime numbers iterator to be infinite");
         });
+    }
+
+    #[bench]
+    fn bench_collatz_sequence_using_one_thousand_as_a_start_number(bencher: &mut Bencher) {
+        bencher.iter(|| CollatzSequence::new(1_000).count());
     }
 }
