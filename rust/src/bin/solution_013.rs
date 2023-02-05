@@ -50,7 +50,7 @@ impl Solution for Solution013 {
             .get_one::<DigitCount>(DIGIT_COUNT)
             .expect("command-line arguments parser to get argument");
 
-        read_to_vector::<BigUint>(file_path, Some("\n"))
+        read_to_vector::<BigUint>(file_path, Some(&'\n'))
             .iter()
             .sum::<BigUint>()
             .to_string()[0..*digit_count]

@@ -1,3 +1,6 @@
+#![feature(iter_advance_by)]
+#![feature(test)]
+
 pub mod shared;
 
 use clap::{command, Arg, ArgMatches};

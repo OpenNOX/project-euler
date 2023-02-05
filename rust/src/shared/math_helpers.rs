@@ -96,3 +96,74 @@ pub fn proper_divisors(input_number: u64) -> Vec<u64> {
 
     proper_divisors
 }
+
+#[cfg(test)]
+mod tests {
+    extern crate test;
+
+    use super::{is_prime_number, prime_factors, proper_divisors};
+    use crate::shared::Exponent;
+    use test::Bencher;
+
+    #[test]
+    fn is_prime_number_returns_true_for_prime_numbers() {
+        let prime_numbers: Vec<u64> = vec![2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31];
+
+        for prime_number in prime_numbers {
+            assert!(is_prime_number(prime_number));
+        }
+    }
+
+    #[test]
+    fn is_prime_number_returns_false_for_composite_numbers() {
+        let composite_numbers: Vec<u64> = vec![1, 4, 6, 8, 9, 10, 12, 14, 15, 16, 18];
+
+        for composite_number in composite_numbers {
+            assert!(is_prime_number(composite_number) == false);
+        }
+    }
+
+    #[test]
+    fn prime_factors_returns_in_exponential_form() {
+        assert_eq!(
+            prime_factors(850),
+            vec![
+                Exponent {
+                    base_value: 2,
+                    power: 1,
+                },
+                Exponent {
+                    base_value: 5,
+                    power: 2,
+                },
+                Exponent {
+                    base_value: 17,
+                    power: 1,
+                },
+            ]
+        );
+    }
+
+    #[test]
+    fn proper_divisors_returns_proper_divisors_for_input_number() {
+        assert_eq!(
+            proper_divisors(220),
+            vec![1, 2, 4, 5, 10, 11, 20, 22, 44, 55, 110]
+        );
+    }
+
+    #[bench]
+    fn bench_is_prime_number_using_one_millionth_prime_number(bencher: &mut Bencher) {
+        bencher.iter(|| is_prime_number(15_485_863));
+    }
+
+    #[bench]
+    fn bench_prime_factors_using_one_millionth_prime_number(bencher: &mut Bencher) {
+        bencher.iter(|| prime_factors(15_485_863));
+    }
+
+    #[bench]
+    fn bench_proper_divisors_using_one_million(bencher: &mut Bencher) {
+        bencher.iter(|| proper_divisors(1_000_000));
+    }
+}

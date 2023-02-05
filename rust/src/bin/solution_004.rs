@@ -44,7 +44,7 @@ impl Solution for Solution004 {
             for b in start..=end {
                 let product = a * b;
 
-                if is_palindrome(product.to_string()) && product > solution {
+                if is_palindrome(product.to_string().as_str()) && product > solution {
                     solution = product;
                 }
             }

@@ -63,3 +63,51 @@ impl Iterator for PrimeNumbers {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    extern crate test;
+
+    use super::{FibonacciSequence, PrimeNumbers};
+    use test::Bencher;
+
+    #[test]
+    fn fibonacci_sequence_iterates_through_terms() {
+        let expected_fibonacci_sequence: Vec<u64> = vec![1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
+        let actual_fibonacci_sequence: Vec<u64> = FibonacciSequence::default()
+            .take(expected_fibonacci_sequence.len())
+            .collect();
+
+        assert_eq!(actual_fibonacci_sequence, expected_fibonacci_sequence);
+    }
+
+    #[test]
+    fn prime_numbers_iterates_through_primes() {
+        let expected_prime_numbers: Vec<u64> = vec![2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31];
+        let actual_prime_numbers: Vec<u64> = PrimeNumbers::default()
+            .take(expected_prime_numbers.len())
+            .collect();
+
+        assert_eq!(actual_prime_numbers, expected_prime_numbers);
+    }
+
+    #[bench]
+    fn bench_fibonacci_sequence_to_fiftieth_term(bencher: &mut Bencher) {
+        bencher.iter(|| {
+            let mut fibonacci_sequence = FibonacciSequence::default();
+            fibonacci_sequence
+                .advance_by(50)
+                .expect("fibonacci sequence iterator to be infinite");
+        });
+    }
+
+    #[bench]
+    fn bench_prime_numbers_to_one_thousandth_prime(bencher: &mut Bencher) {
+        bencher.iter(|| {
+            let mut prime_numbers = PrimeNumbers::default();
+            prime_numbers
+                .advance_by(1_000)
+                .expect("prime numbers iterator to be infinite");
+        });
+    }
+}

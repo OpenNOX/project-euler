@@ -49,7 +49,7 @@ impl Solution for Solution011 {
             .get_one::<GridFilePath>(GRID_FILE_PATH)
             .expect("command-line arguments parser to get argument");
 
-        let input_data = read_to_grid(grid_file_path);
+        let input_data = read_to_grid(grid_file_path, Some(&' '));
         let mut solution = 0;
 
         for y in 0..input_data.len() {
