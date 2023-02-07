@@ -1,3 +1,4 @@
+#![feature(is_some_and)]
 #![feature(iter_advance_by)]
 #![feature(test)]
 
